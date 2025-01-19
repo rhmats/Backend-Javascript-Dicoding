@@ -20,6 +20,11 @@ const AuthenticationsService = require("./services/postgres/AuthenticationsServi
 const TokenManager = require("./tokenize/TokenManager");
 const AuthenticationsValidator = require("./validator/authentications");
 
+// collaborations
+const collaborations = require("./api/collaborations");
+const CollaborationsValidator = require("./validator/collaborations");
+const CollaborationsService = require("./services/postgres/CollaborationsService");
+
 const init = async () => {
   const notesService = new NotesService();
   const usersService = new UsersService();
@@ -34,7 +39,7 @@ const init = async () => {
       },
     },
   });
-  
+
   // registrasi plugin eksternal
   await server.register([
     {
@@ -81,6 +86,14 @@ const init = async () => {
         usersService,
         tokenManager: TokenManager,
         validator: AuthenticationsValidator,
+      },
+    },
+    {
+      plugin: collaborations,
+      options: {
+        CollaborationsService,
+        notesService,
+        validator: CollaborationsValidator,
       },
     },
   ]);
